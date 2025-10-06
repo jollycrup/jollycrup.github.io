@@ -1,0 +1,3106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Epic Alberta Roadtrip Guide | Couples Adventure 2025</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #1E40AF;
+      --secondary-green: #059669;
+      --accent-orange: #EA580C;
+      --light-blue: #EFF6FF;
+      --soft-gray: #F8FAFC;
+      --dark-text: #1E293B;
+      --medium-gray: #14171c;
+      --success-green: #10B981;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffffff 0%, var(--light-blue) 100%);
+      color: var(--dark-text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 100vh;
+      background: 
+        linear-gradient(rgba(30, 64, 175, 0.3), rgba(59, 130, 246, 0.4)),
+        url('./images/hero-background.jpg') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      padding: 0 20px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+    }
+
+    .hero-subtitle {
+      font-size: 1.4rem;
+      color: white;
+      margin-bottom: 30px;
+      font-weight: 300;
+      text-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--medium-gray);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      z-index: 1000;
+      padding: 15px 0;
+    }
+
+    .nav-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--dark-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-blue);
+    }
+
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-link-main {
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      min-width: 180px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      margin-top: 10px;
+      z-index: 1000;
+      padding: 8px 0;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 20px;
+      color: var(--dark-text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+
+    .dropdown-content a:hover {
+      background: var(--soft-gray);
+      color: var(--primary-blue);
+    }
+
+    .nav-dropdown.show .dropdown-content {
+      display: block;
+    }
+
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--primary-blue);
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    /* Main Content Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 40px;
+    }
+
+    /* Main Content */
+    .main-content {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 0;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    /* Day Cards */
+    .destination {
+      margin-bottom: 40px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    .destination-header {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-green));
+      padding: 30px;
+      color: white;
+    }
+
+    .destination-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .destination-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+    }
+
+    .destination-content {
+      padding: 30px;
+    }
+
+    /* Information Cards */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .info-card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .info-card-title {
+      font-weight: 600;
+      color: var(--primary-blue);
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--medium-gray);
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* Photo Gallery */
+    .photo-section {
+      margin: 30px 0;
+    }
+
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .photo-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .photo-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .photo-item:hover .photo-overlay {
+      transform: translateY(0);
+    }
+
+    .photo-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .photo-description {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      height: 250px;
+    }
+
+    .carousel-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      height: 100%;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      position: relative;
+      height: 100%;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      color: white;
+      padding: 20px 20px 15px;
+    }
+
+    .carousel-caption h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    .carousel-caption p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Photo Grid for Compact Gallery */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+
+    .photo-grid-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+      height: 100%;
+    }
+
+    .photo-grid-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-grid-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .photo-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      color: white;
+      padding: 6px 8px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary-blue);
+      transition: all 0.3s ease;
+      z-index: 10;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .carousel-btn:hover {
+      background: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-btn.prev {
+      left: 20px;
+    }
+
+    .carousel-btn.next {
+      right: 20px;
+    }
+
+    .carousel-indicators {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .carousel-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-indicator.active {
+      background: white;
+      width: 30px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .carousel-btn.prev {
+        left: 10px;
+      }
+
+      .carousel-btn.next {
+        right: 10px;
+      }
+
+      .carousel-caption h3 {
+        font-size: 1.3rem;
+      }
+
+      .carousel-caption p {
+        font-size: 0.9rem;
+      }
+
+      .carousel-container {
+        height: 200px;
+      }
+
+      .photo-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .photo-label {
+        font-size: 0.65rem;
+        padding: 4px 6px;
+      }
+
+      .carousel-caption h3 {
+        font-size: 0.9rem;
+      }
+
+      .carousel-caption {
+        padding: 15px 15px 10px;
+      }
+    }
+
+    /* Timeline */
+    .timeline {
+      margin: 30px 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: var(--soft-gray);
+      border-radius: 12px;
+      border-left: 4px solid var(--primary-blue);
+    }
+
+    .timeline-time {
+      width: 80px;
+      font-weight: 600;
+      color: var(--primary-blue);
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      flex: 1;
+      margin-left: 20px;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .timeline-description {
+      color: var(--medium-gray);
+      font-size: 0.9rem;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .sidebar-card {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-blue);
+      margin-bottom: 20px;
+    }
+
+    /* Cost Calculator */
+    .cost-calculator {
+      background: linear-gradient(135deg, var(--success-green), #047857);
+      color: white;
+    }
+
+    .cost-total {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .cost-breakdown {
+      list-style: none;
+    }
+
+    .cost-breakdown li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .cost-breakdown li:last-child {
+      border-bottom: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* Weather Widget */
+    .weather-widget {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-green));
+      color: white;
+    }
+
+    .weather-today {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .weather-temp {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .weather-icon {
+      font-size: 2rem;
+    }
+
+    .weather-forecast {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .forecast-day {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    /* Quick Facts */
+    .quick-facts {
+      list-style: none;
+    }
+
+    .quick-facts li {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .quick-facts li:last-child {
+      border-bottom: none;
+    }
+
+    .quick-facts i {
+      width: 20px;
+      color: var(--primary-blue);
+      margin-right: 15px;
+    }
+
+    /* Map Section */
+    .map-section {
+      grid-column: 1 / -1;
+      margin-top: 40px;
+    }
+
+    .map-container {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    #interactive-map {
+      width: 100%;
+      height: 600px;
+      background: white;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .destination {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .destination:nth-child(1) { animation-delay: 0.1s; }
+    .destination:nth-child(2) { animation-delay: 0.2s; }
+    .destination:nth-child(3) { animation-delay: 0.3s; }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .nav-links.active {
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .nav-dropdown {
+        width: 100%;
+      }
+
+      .dropdown-content {
+        position: static;
+        display: none;
+        box-shadow: none;
+        margin-top: 5px;
+        padding-left: 15px;
+        background: var(--soft-gray);
+        border-radius: 8px;
+      }
+
+      .nav-dropdown.show .dropdown-content {
+        display: block;
+      }
+
+      .nav-link-main {
+        width: 100%;
+      }
+
+      .container {
+        padding: 40px 15px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Utility Classes */
+    .text-center { text-align: center; }
+    .mb-20 { margin-bottom: 20px; }
+    .mb-30 { margin-bottom: 30px; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-blue);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-content">
+      <div class="logo">Epic Alberta Guide</div>
+      <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <div class="nav-dropdown">
+          <a href="" class="nav-link-main">Itinerary ▾</a>
+          <div class="dropdown-content">
+            <a href="#day0">Day 0: Arrival</a>
+            <a href="#day1">Day 1: Badlands</a>
+            <a href="#day2">Day 2: Banff</a>
+            <a href="#day3">Day 3: Icefields</a>
+            <a href="#day4">Day 4: Departure</a>
+          </div>
+        </div>
+        <a href="#gallery">Gallery</a>
+        <a href="#costs">Costs</a>
+        <a href="#map">Map</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Our Epic Alberta Roadtrip</h1>
+      <p class="hero-subtitle">A 5-day couples adventure through the Canadian Rockies - October 11-15, 2025</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">5</span>
+          <span class="stat-label">Days</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1,400</span>
+          <span class="stat-label">Kilometers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Adventure Buddies</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">$527</span>
+          <span class="stat-label">Total Cost</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" style="background: linear-gradient(135deg, #ffffff 0%, #EFF6FF 100%); padding: 30px 20px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary-blue); text-align: center; margin-bottom: 8px;">Trip Gallery</h2>
+      <p style="text-align: center; color: var(--medium-gray); margin-bottom: 20px; font-size: 0.9rem;">Swipe through our adventure highlights</p>
+
+      <div class="carousel-container">
+        <div class="carousel-wrapper" id="carouselWrapper">
+          <!-- Slide 1: Day 1 Badlands -->
+          <div class="carousel-slide">
+            <div class="photo-grid">
+              <div class="photo-grid-item">
+                <img src="./images/horseshoe-canyon.png" alt="Horseshoe Canyon">
+                <span class="photo-label">Horseshoe Canyon</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/drumheller-hoodoos.png" alt="Drumheller Hoodoos">
+                <span class="photo-label">Drumheller Hoodoos</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/calgary-skyline.png" alt="Calgary Skyline">
+                <span class="photo-label">Calgary Sunset</span>
+              </div>
+            </div>
+            <div class="carousel-caption">
+              <h3>Day 1: Badlands & Calgary</h3>
+            </div>
+          </div>
+
+          <!-- Slide 2: Day 2 Banff -->
+          <div class="carousel-slide">
+            <div class="photo-grid">
+              <div class="photo-grid-item">
+                <img src="./images/lake-minnewanka.png" alt="Lake Minnewanka">
+                <span class="photo-label">Lake Minnewanka</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/vermilion-lakes.png" alt="Vermilion Lakes">
+                <span class="photo-label">Vermilion Lakes</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/lake-louise.png" alt="Banff Mountains">
+                <span class="photo-label">Banff Area</span>
+              </div>
+            </div>
+            <div class="carousel-caption">
+              <h3>Day 2: Banff National Park</h3>
+            </div>
+          </div>
+
+          <!-- Slide 3: Day 3 Icefields Parkway -->
+          <div class="carousel-slide">
+            <div class="photo-grid">
+              <div class="photo-grid-item">
+                <img src="./images/lake-louise.png" alt="Lake Louise">
+                <span class="photo-label">Lake Louise Sunrise</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/bow-lake.png" alt="Bow Lake">
+                <span class="photo-label">Bow Lake</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/columbia-icefield.png" alt="Columbia Icefield">
+                <span class="photo-label">Columbia Icefield</span>
+              </div>
+            </div>
+            <div class="carousel-caption">
+              <h3>Day 3: Icefields Parkway</h3>
+            </div>
+          </div>
+
+          <!-- Slide 4: Natural Wonders -->
+          <div class="carousel-slide">
+            <div class="photo-grid">
+              <div class="photo-grid-item">
+                <img src="./images/athabasca-falls.png" alt="Athabasca Falls">
+                <span class="photo-label">Athabasca Falls</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/morants-curve.png" alt="Mountain Vista">
+                <span class="photo-label">Mountain Vista</span>
+              </div>
+              <div class="photo-grid-item">
+                <img src="./images/hero-background.jpg" alt="Rocky Mountains">
+                <span class="photo-label">Canadian Rockies</span>
+              </div>
+            </div>
+            <div class="carousel-caption">
+              <h3>Natural Wonders</h3>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-btn prev" id="prevBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-btn next" id="nextBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container" id="itinerary">
+    <main class="main-content">
+
+      <!-- Day 0 - Arrival -->
+      <article class="destination" id="day0">
+        <div class="destination-header" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+          <h2 class="destination-title">Day 0: Arrival Day</h2>
+          <p class="destination-subtitle">Toronto → Edmonton | October 11, 2025</p>
+        </div>
+        <div class="destination-content">
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #8B5CF6;">
+                  <i class="fas fa-plane-arrival"></i>
+                </div>
+                <h3 class="info-card-title">Flight Information</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Arrival Time</span>
+                <span class="info-value">9:30 PM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Airport</span>
+                <span class="info-value">Edmonton (YEG)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">From</span>
+                <span class="info-value">Toronto (YYZ)</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #8B5CF6;">
+                  <i class="fas fa-car"></i>
+                </div>
+                <h3 class="info-card-title">Car Rental Pickup</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">Edmonton Airport</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Time</span>
+                <span class="info-value">~10:00 PM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Duration</span>
+                <span class="info-value">5 Days</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #8B5CF6;">
+                  <i class="fas fa-home"></i>
+                </div>
+                <h3 class="info-card-title">Accommodation</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Type</span>
+                <span class="info-value">Friend's House 🏠</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">Edmonton</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Note</span>
+                <span class="info-value">Thank you friend! ❤️</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #8B5CF6;">
+                  <i class="fas fa-info-circle"></i>
+                </div>
+                <h3 class="info-card-title">Tips & Reminders</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Time Zone</span>
+                <span class="info-value">Mountain Time (MST)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Time Difference</span>
+                <span class="info-value">-2 hours from Toronto</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Weather</span>
+                <span class="info-value">Cool Evening (~8°C)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">21:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Land in Edmonton (YEG)</div>
+                <div class="timeline-description">Welcome to Alberta! Grab luggage and head to rental car area</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">22:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Pick Up Rental Car</div>
+                <div class="timeline-description">Complete paperwork, inspect vehicle, load up and head out</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">22:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Drive to Hotel</div>
+                <div class="timeline-description">Short drive to accommodation, check in and settle down</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">23:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Rest & Prepare</div>
+                <div class="timeline-description">Get some sleep for tomorrow's big adventure!</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 8px;">
+            <h4 style="color: #92400E; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-lightbulb"></i> Pro Tips for Arrival Day
+            </h4>
+            <ul style="color: #78350F; margin-left: 20px; line-height: 1.8;">
+              <li>Have your rental confirmation and driver's license ready</li>
+              <li>Download offline maps before you leave Toronto</li>
+              <li>Pick up snacks at the airport if hungry</li>
+              <li>Set alarms for early start tomorrow!</li>
+              <li>Pack warm layers - Alberta nights are cold in October</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 1 (formerly Day 1, now Day 2) -->
+      <article class="destination" id="day1">
+        <div class="destination-header">
+          <h2 class="destination-title">Day 1: Badlands Discovery</h2>
+          <p class="destination-subtitle">Edmonton → Drumheller → Calgary | October 12 | 380 km</p>
+        </div>
+        <div class="destination-content">
+          
+          <!-- Information Cards -->
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-thermometer-half"></i>
+                </div>
+                <h3 class="info-card-title">Weather & Conditions</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Temperature</span>
+                <span class="info-value">8°C - 15°C</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Conditions</span>
+                <span class="info-value">Partly Cloudy</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Best Photo Time</span>
+                <span class="info-value">Golden Hour: 7:30 PM</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-dollar-sign"></i>
+                </div>
+                <h3 class="info-card-title">Costs & Fees</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Royal Tyrrell Museum</span>
+                <span class="info-value">$21 per adult</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Calgary Tower (Optional)</span>
+                <span class="info-value">$18 per adult</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Fuel</span>
+                <span class="info-value">~$65 CAD</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <h3 class="info-card-title">Attractions & Must-Sees</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Royal Tyrrell Museum</span>
+                <span class="info-value">HIGHLY RECOMMENDED</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">World's Largest Dinosaur</span>
+                <span class="info-value">Fun photo op!</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Walking Required</span>
+                <span class="info-value">Minimal - all accessible</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-parking"></i>
+                </div>
+                <h3 class="info-card-title">Parking Information</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">All Drumheller Sites</span>
+                <span class="info-value">Free parking</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Calgary Downtown</span>
+                <span class="info-value">Hotel parking included</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Accessibility</span>
+                <span class="info-value">All wheelchair accessible</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; color: white;">
+            <h4 style="margin-bottom: 15px; font-weight: 600; font-size: 1.2rem;">
+              <i class="fas fa-info-circle"></i> Day 1 Attractions & Booking Info
+            </h4>
+            <div style="display: grid; gap: 15px;">
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🦕 Royal Tyrrell Museum</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">World-renowned paleontology museum with 160,000+ specimens. Budget 1.5-2 hours minimum!</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> $21 per adult, $10 youth/senior</p>
+                <p style="margin: 5px 0;"><strong>Hours:</strong> 10 AM - 5 PM (check for seasonal changes)</p>
+                <a href="https://tyrrellmuseum.com/"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #047857; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Royal Tyrrell Museum Info →
+                </a>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🦖 World's Largest Dinosaur</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">86-foot (25m) T-Rex statue! Climb 106 stairs inside for panoramic view, or enjoy from ground level.</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> $5 to climb inside (optional)</p>
+                <p style="margin: 5px 0;"><strong>Location:</strong> Downtown Drumheller, can't miss it!</p>
+                <p style="margin: 5px 0;"><strong>Note:</strong> Leg-friendly option - view from outside, skip the climb!</p>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🌉 Rosedale Suspension Bridge (Optional)</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">Historic 117m footbridge from 1931 mining era. Flat walking, scenic river valley views.</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> Free</p>
+                <p style="margin: 5px 0;"><strong>Walking:</strong> Flat bridge crossing, wheelchair accessible</p>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🏙️ Calgary Tower (Optional)</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">191m observation deck with 360° city & mountain views. Glass floor! Elevator access.</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> $18 per adult</p>
+                <p style="margin: 5px 0;"><strong>Hours:</strong> 9 AM - 9 PM</p>
+                <a href="https://www.calgarytower.com/"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #047857; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Calgary Tower Info →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">07:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Departure from Edmonton</div>
+                <div class="timeline-description">Begin journey south towards Drumheller - 2.5 hour drive</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">10:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Horseshoe Canyon</div>
+                <div class="timeline-description">Dramatic badlands overlook - accessible deck, 30 min stop</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">10:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">World's Largest Dinosaur 🦕</div>
+                <div class="timeline-description">86-foot T-Rex statue! Climb inside (106 stairs) or view from outside - 5 min from Horseshoe Canyon</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">11:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Royal Tyrrell Museum</div>
+                <div class="timeline-description">WORLD-CLASS dinosaur museum! 160,000+ fossils. Budget 1.5-2 hours minimum - wheelchair accessible</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">13:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Lunch in Drumheller</div>
+                <div class="timeline-description">Grab lunch at downtown Drumheller cafe or diner</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">14:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Drumheller Hoodoos</div>
+                <div class="timeline-description">Iconic mushroom rocks - flat 500m boardwalk, 30-45 min</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">14:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Rosedale Suspension Bridge (Optional)</div>
+                <div class="timeline-description">117m historic footbridge over Red Deer River - flat walking, great views</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">15:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Drive to Calgary</div>
+                <div class="timeline-description">1.5 hour drive south to Calgary</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">17:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Calgary Tower (Optional)</div>
+                <div class="timeline-description">191m observation deck with 360° views - $18 entry, elevator access</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Prince's Island Park Walk</div>
+                <div class="timeline-description">Urban park on Bow River, flat walking paths, downtown skyline views</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">19:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Scotsman's Hill Sunset</div>
+                <div class="timeline-description">Best Calgary skyline viewpoint - drive-up access, golden hour magic</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">19:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Dinner & Hotel Check-in</div>
+                <div class="timeline-description">Downtown Calgary - rest up for tomorrow's Banff adventure!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photo Gallery -->
+          <div class="photo-section">
+            <h3 class="mb-20">Photo Opportunities</h3>
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <img src="./images/horseshoe-canyon.png" alt="Horseshoe Canyon">
+                <div class="photo-overlay">
+                  <div class="photo-title">Horseshoe Canyon</div>
+                  <div class="photo-description">Best lighting: Late afternoon, 4-6 PM</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/drumheller-hoodoos.png" alt="Drumheller Hoodoos">
+                <div class="photo-overlay">
+                  <div class="photo-title">Drumheller Hoodoos</div>
+                  <div class="photo-description">Iconic rock formations, wheelchair accessible</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/calgary-skyline.png" alt="Calgary Skyline">
+                <div class="photo-overlay">
+                  <div class="photo-title">Calgary Skyline</div>
+                  <div class="photo-description">Golden hour magic from Scotsman's Hill</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 8px;">
+            <h4 style="color: #92400E; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-lightbulb"></i> Pro Tips for Day 1 - Dinosaur Day!
+            </h4>
+            <ul style="color: #78350F; margin-left: 20px; line-height: 1.8;">
+              <li><strong>Royal Tyrrell Museum:</strong> MUST-SEE! World-class facility, budget minimum 1.5 hours, could easily spend 3 hours</li>
+              <li><strong>Museum Timing:</strong> Arrive 11:15 AM when it's less crowded (before noon rush)</li>
+              <li><strong>Fuel Strategy:</strong> Fill up in Edmonton (cheaper) - next gas in Drumheller or Calgary</li>
+              <li><strong>Lunch Timing:</strong> Eat after museum (1-1:30 PM) to avoid noon crowds</li>
+              <li><strong>Photo Ops:</strong> World's Largest Dinosaur is hilarious - great group photos!</li>
+              <li><strong>Calgary Options:</strong> Tower + Park are optional - skip if tired, save energy for Day 3 sunrise</li>
+              <li><strong>Leg-Friendly:</strong> All stops are accessible, skip the dinosaur climb if saving legs</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 20px; padding: 20px; background: #DBEAFE; border-left: 4px solid #3B82F6; border-radius: 8px;">
+            <h4 style="color: #1E40AF; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-check-circle"></i> Day 1 Evening Checklist (Prep for Day 2)
+            </h4>
+            <ul style="color: #1E40AF; margin-left: 20px; line-height: 1.8;">
+              <li>✓ Check into Calgary hotel by 8 PM - get good rest!</li>
+              <li>✓ Charge ALL devices overnight (cameras, phones, power banks)</li>
+              <li>✓ Check Banff weather forecast for tomorrow</li>
+              <li>✓ Set alarm for 6:30 AM (Day 2 early start to Banff)</li>
+              <li>✓ Pack day bag: water bottles, snacks, layers</li>
+              <li>✓ Download Banff National Park offline maps</li>
+              <li>✓ Buy Banff park pass tomorrow at entry gate ($10.50/person)</li>
+              <li>✓ Prepare for Day 3 VERY early start (remind yourself about 4 AM alarm!)</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 2 -->
+      <article class="destination" id="day2">
+        <div class="destination-header">
+          <h2 class="destination-title">Day 2: Banff Town & Mountain Views</h2>
+          <p class="destination-subtitle">Calgary → Banff Exploration → Return to Calgary | October 13 | 320 km</p>
+        </div>
+        <div class="destination-content">
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-thermometer-half"></i>
+                </div>
+                <h3 class="info-card-title">Weather & Conditions</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Temperature</span>
+                <span class="info-value">5°C - 12°C</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Conditions</span>
+                <span class="info-value">Clear, Possible Frost</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Best Photo Time</span>
+                <span class="info-value">Afternoon: 4-6 PM</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-dollar-sign"></i>
+                </div>
+                <h3 class="info-card-title">Costs & Fees</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Park Pass (Daily)</span>
+                <span class="info-value">$10.50 CAD</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Banff Gondola (Optional)</span>
+                <span class="info-value">$70 CAD/person</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Fuel</span>
+                <span class="info-value">~$50 CAD</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <h3 class="info-card-title">Passes & Requirements</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Banff National Park Pass</span>
+                <span class="info-value">Required</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Gondola Booking</span>
+                <span class="info-value">Book online ahead</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Walking Required</span>
+                <span class="info-value">Minimal - mostly drive-up</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-parking"></i>
+                </div>
+                <h3 class="info-card-title">Parking Information</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Cascade Ponds</span>
+                <span class="info-value">25 spaces, Free</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Lake Minnewanka</span>
+                <span class="info-value">200 spaces, Free</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Downtown Banff</span>
+                <span class="info-value">Street parking $3/hr</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">07:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Departure from Calgary</div>
+                <div class="timeline-description">Early start, grab breakfast on the way - 1.5 hour drive to Banff</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">08:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Cascade Ponds</div>
+                <div class="timeline-description">First stop - peaceful mountain reflections, 5 min walk from parking</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">09:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Lake Minnewanka Scenic Drive</div>
+                <div class="timeline-description">Drive along lakeshore with multiple pullouts, stay in car or short walks</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">11:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Two Jack Lake</div>
+                <div class="timeline-description">Drive-up viewpoint, stunning mountain backdrop - 2 min walk</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">12:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Lunch in Banff Town</div>
+                <div class="timeline-description">Banff Avenue - restaurants, cafes, boutique shops</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">13:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Banff Town Exploration</div>
+                <div class="timeline-description">Walk Banff Avenue, visit shops, Cascade Gardens (flat walking)</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">15:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Vermilion Lakes Drive</div>
+                <div class="timeline-description">Three scenic viewpoints along 4km road, drive between each</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Tunnel Mountain Drive Viewpoint</div>
+                <div class="timeline-description">Drive-up panoramic view of Banff townsite and Bow Valley</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Surprise Corner Viewpoint</div>
+                <div class="timeline-description">Classic Fairmont Banff Springs Hotel view - parking lot access</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">17:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Bow Falls</div>
+                <div class="timeline-description">Short 50m flat walk from parking to viewpoint platform</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Drive Back to Calgary</div>
+                <div class="timeline-description">1.5 hour drive, arrive Calgary ~7:45 PM for dinner and rest</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="photo-section">
+            <h3 class="mb-20">Photo Opportunities</h3>
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <img src="./images/lake-minnewanka.png" alt="Lake Minnewanka">
+                <div class="photo-overlay">
+                  <div class="photo-title">Lake Minnewanka</div>
+                  <div class="photo-description">Morning calm water for perfect reflections</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/vermilion-lakes.png" alt="Vermilion Lakes">
+                <div class="photo-overlay">
+                  <div class="photo-title">Vermilion Lakes</div>
+                  <div class="photo-description">Classic Banff postcard view with Mt. Rundle</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/banff-avenue.png" alt="Banff Avenue">
+                <div class="photo-overlay">
+                  <div class="photo-title">Banff Avenue</div>
+                  <div class="photo-description">Charming mountain town with shops and cafes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 8px;">
+            <h4 style="color: #92400E; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-lightbulb"></i> Pro Tips for Day 2
+            </h4>
+            <ul style="color: #78350F; margin-left: 20px; line-height: 1.8;">
+              <li><strong>Easy Walking Day:</strong> All viewpoints require max 5 min walk - very leg-friendly!</li>
+              <li><strong>Park Pass:</strong> Buy at park entry gate - valid all day at all locations</li>
+              <li><strong>Wildlife Watch:</strong> Elk common near Vermilion Lakes - stay 30m away, don't approach</li>
+              <li><strong>Banff Town Time:</strong> 1.5 hours enough to explore main street and grab coffee</li>
+              <li><strong>Parking Strategy:</strong> Street parking free on side streets, pay lots on Banff Ave</li>
+              <li><strong>Gas Up:</strong> Fill tank in Banff before returning - cheaper than Calgary</li>
+              <li><strong>Return Route:</strong> Trans-Canada Hwy 1 East - straight shot back to Calgary</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 20px; padding: 20px; background: #DBEAFE; border-left: 4px solid #3B82F6; border-radius: 8px;">
+            <h4 style="color: #1E40AF; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-check-circle"></i> Day 2 Evening Checklist (Prep for SUNRISE Day 3!)
+            </h4>
+            <ul style="color: #1E40AF; margin-left: 20px; line-height: 1.8;">
+              <li>✓ <strong>CRITICAL:</strong> Set alarm for 3:45 AM - sunrise waits for no one!</li>
+              <li>✓ Check Lake Louise sunrise time (approx 7:45 AM in October)</li>
+              <li>✓ Prepare breakfast/coffee the night before for quick departure</li>
+              <li>✓ Lay out warm clothes - it will be freezing at dawn!</li>
+              <li>✓ Charge all cameras, phones, and devices to 100%</li>
+              <li>✓ Check Calgary hotel checkout time (may need early checkout)</li>
+              <li>✓ Download offline maps - Lake Louise to Icefields Parkway</li>
+              <li>✓ Fill gas tank tonight if possible - saves time tomorrow</li>
+              <li>✓ Pack thermos with hot drinks for the drive</li>
+              <li>✓ Check road conditions on 511 Alberta (ice possible)</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 3 -->
+      <article class="destination" id="day3">
+        <div class="destination-header">
+          <h2 class="destination-title">Day 3: Lake Louise Sunrise & Icefields Parkway</h2>
+          <p class="destination-subtitle">Calgary → Lake Louise Sunrise → Icefields Parkway → Edmonton | October 14 | 620 km</p>
+        </div>
+        <div class="destination-content">
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-thermometer-half"></i>
+                </div>
+                <h3 class="info-card-title">Weather & Conditions</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Temperature</span>
+                <span class="info-value">-2°C - 8°C</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Sunrise Time</span>
+                <span class="info-value">~7:45 AM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Road Conditions</span>
+                <span class="info-value">Check 511 Alberta</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-dollar-sign"></i>
+                </div>
+                <h3 class="info-card-title">Costs & Fees</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Park Pass</span>
+                <span class="info-value">$10.50 CAD (Day 2)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Lake Louise Parking</span>
+                <span class="info-value">$15/day</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Fuel</span>
+                <span class="info-value">~$95 CAD</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-id-card"></i>
+                </div>
+                <h3 class="info-card-title">Passes & Requirements</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">National Park Pass</span>
+                <span class="info-value">Valid from Day 2</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Walking Required</span>
+                <span class="info-value">Minimal - 5-10 min max</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Emergency Kit</span>
+                <span class="info-value">Must Have</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon">
+                  <i class="fas fa-parking"></i>
+                </div>
+                <h3 class="info-card-title">Parking Information</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Lake Louise</span>
+                <span class="info-value">Arrive before 7 AM!</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">All Viewpoints</span>
+                <span class="info-value">Roadside pullouts free</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Icefield Centre</span>
+                <span class="info-value">300 spaces, Free</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #EF4444, #DC2626); border-radius: 12px; color: white;">
+            <h4 style="margin-bottom: 15px; font-weight: 600; font-size: 1.2rem;">
+              <i class="fas fa-ticket-alt"></i> Important Bookings & Links for Day 3
+            </h4>
+            <div style="display: grid; gap: 15px;">
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🎫 Glacier Skywalk</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">Glass walkway suspended 280m above Sunwapta Valley. Book 2-3 days ahead!</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> ~$35 CAD per person</p>
+                <p style="margin: 5px 0;"><strong>Duration:</strong> 30 minutes</p>
+                <a href="https://www.banffjaspercollection.com/attractions/columbia-icefield-skywalk/"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #DC2626; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Book Glacier Skywalk →
+                </a>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🚌 Columbia Icefield Ice Explorer (Optional)</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">Drive onto Athabasca Glacier - incredible but EXPENSIVE and time-consuming</p>
+                <p style="margin: 5px 0;"><strong>Cost:</strong> ~$115 CAD per person</p>
+                <p style="margin: 5px 0;"><strong>Duration:</strong> 90 minutes total</p>
+                <p style="margin: 5px 0;"><strong>Note:</strong> Skip this to stay on schedule - viewpoint is free and amazing!</p>
+                <a href="https://www.banffjaspercollection.com/attractions/columbia-icefield-glacier-adventure/"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #DC2626; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  View Ice Explorer Details →
+                </a>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🎟️ Parks Canada Pass</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">Required for Banff & Jasper National Parks</p>
+                <p style="margin: 5px 0;"><strong>Daily Pass:</strong> $10.50 per person (buy at park gates)</p>
+                <p style="margin: 5px 0;"><strong>Discovery Pass (Annual):</strong> $72.25 per person</p>
+                <a href="https://www.pc.gc.ca/en/pn-np/ab/banff/visit/tarifs-fees"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #DC2626; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  Parks Canada Info →
+                </a>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px;">
+                <strong style="font-size: 1.1rem;">🚗 Road Conditions</strong>
+                <p style="margin: 8px 0; line-height: 1.6;">Check before leaving - Icefields Parkway can be icy in October</p>
+                <a href="https://511.alberta.ca/"
+                   target="_blank"
+                   style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: white; color: #DC2626; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                  511 Alberta Road Report →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">04:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">SUNRISE MISSION START! 🌅</div>
+                <div class="timeline-description">Leave Calgary in darkness - 2.5 hour drive to Lake Louise</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">06:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Arrive Lake Louise</div>
+                <div class="timeline-description">Park near lake, walk to lakeshore (5 min), find perfect sunrise spot</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">07:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">SUNRISE AT LAKE LOUISE ☀️</div>
+                <div class="timeline-description">Watch golden light hit Victoria Glacier - MAGICAL! Stay until 8:30</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">09:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Herbert Lake</div>
+                <div class="timeline-description">Small peaceful lake, 2 min walk from parking - often empty!</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">09:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Bow Lake & Crowfoot Glacier</div>
+                <div class="timeline-description">Drive-up viewpoint, glacier visible from car</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">10:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Peyto Lake Viewpoint</div>
+                <div class="timeline-description">Lower viewpoint: 5 min walk, wheelchair accessible, stunning wolf-head shaped lake</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">11:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Mistaya Canyon</div>
+                <div class="timeline-description">10 min walk to canyon edge, powerful water-carved gorge</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">12:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Saskatchewan River Crossing</div>
+                <div class="timeline-description">Gas station & snacks - LAST STOP before Jasper! Lunch break</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">13:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Weeping Wall</div>
+                <div class="timeline-description">Roadside pullout - waterfall frozen in October, no walking</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">14:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Big Bend & Big Hill</div>
+                <div class="timeline-description">Multiple pullouts with glacier views - drive up, quick photos</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">14:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Columbia Icefield Discovery Centre</div>
+                <div class="timeline-description">Visitor center with glacier views, restrooms, displays</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">15:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Glacier Skywalk 🌉</div>
+                <div class="timeline-description">Glass-floor walkway 280m above canyon - 5 min walk, 30 min experience (BOOK AHEAD!)</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:15</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Sunwapta Falls</div>
+                <div class="timeline-description">2 viewpoints: upper is 1 min walk, lower 3 min - both flat</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Athabasca Falls</div>
+                <div class="timeline-description">Most powerful waterfall, 5 min flat walk, multiple viewing platforms</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">17:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Begin Drive to Edmonton</div>
+                <div class="timeline-description">3.5 hour drive via Jasper, arriving ~9 PM - long but rewarding day!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="photo-section">
+            <h3 class="mb-20">Photo Opportunities</h3>
+            <div class="photo-gallery">
+              <div class="photo-item">
+                <img src="./images/lake-louise.png" alt="Lake Louise">
+                <div class="photo-overlay">
+                  <div class="photo-title">Lake Louise</div>
+                  <div class="photo-description">World-famous turquoise waters</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/bow-lake.png" alt="Bow Lake">
+                <div class="photo-overlay">
+                  <div class="photo-title">Bow Lake</div>
+                  <div class="photo-description">Glacier-fed alpine lake</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/columbia-icefield.png" alt="Columbia Icefield">
+                <div class="photo-overlay">
+                  <div class="photo-title">Columbia Icefield</div>
+                  <div class="photo-description">Largest icefield in North America</div>
+                </div>
+              </div>
+              <div class="photo-item">
+                <img src="./images/athabasca-falls.png" alt="Athabasca Falls">
+                <div class="photo-overlay">
+                  <div class="photo-title">Athabasca Falls</div>
+                  <div class="photo-description">Dramatic waterfall accessible year-round</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #FEF3C7; border-left: 4px solid #F59E0B; border-radius: 8px;">
+            <h4 style="color: #92400E; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-lightbulb"></i> Pro Tips for Day 3 - SUNRISE EDITION
+            </h4>
+            <ul style="color: #78350F; margin-left: 20px; line-height: 1.8;">
+              <li><strong>4 AM Start:</strong> Yes it's early, but Lake Louise sunrise is WORTH IT - trust us!</li>
+              <li><strong>Pre-Sunrise Position:</strong> Arrive 75 min before sunrise to find best spot and set up</li>
+              <li><strong>Layer Up:</strong> -2°C at dawn - bring everything: gloves, hat, scarf, jacket</li>
+              <li><strong>Leg-Friendly:</strong> Maximum walking today is 10 min - all viewpoints accessible!</li>
+              <li><strong>Snack Strategy:</strong> Breakfast at Saskatchewan Crossing diner (only option for 200km)</li>
+              <li><strong>Gas Critical:</strong> Fill at Lake Louise village OR Saskatchewan Crossing - no other options</li>
+              <li><strong>Wildlife:</strong> Bears/elk common - stay in car, use zoom lens</li>
+              <li><strong>No Cell Service:</strong> Offline maps essential - 300km stretch with zero signal</li>
+              <li><strong>Bathroom Stops:</strong> Limited! Use facilities at Discovery Centre & Saskatchewan Crossing</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 20px; padding: 20px; background: #DBEAFE; border-left: 4px solid #3B82F6; border-radius: 8px;">
+            <h4 style="color: #1E40AF; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-check-circle"></i> Day 3 Evening Checklist (Prep for Day 4)
+            </h4>
+            <ul style="color: #1E40AF; margin-left: 20px; line-height: 1.8;">
+              <li>✓ Arrive back at friend's house ~9 PM - thank them for hosting!</li>
+              <li>✓ You deserve REST after 17 hour day + 4 AM start!</li>
+              <li>✓ Repack bags and organize luggage for departure tomorrow</li>
+              <li>✓ Charge all devices overnight for travel day</li>
+              <li>✓ Confirm flight time: 6:45 PM departure tomorrow</li>
+              <li>✓ Plan route to airport (leave by 4 PM)</li>
+              <li>✓ Review car rental return requirements</li>
+              <li>✓ Set alarm for 8 AM (sleep in after today!)</li>
+              <li>✓ Make list of Edmonton souvenirs to buy tomorrow</li>
+              <li>✓ Download photos from cameras - backup memories!</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- Day 4 - Departure Day -->
+      <article class="destination" id="day4">
+        <div class="destination-header" style="background: linear-gradient(135deg, #EF4444, #DC2626);">
+          <h2 class="destination-title">Day 4: Departure & Edmonton Exploration</h2>
+          <p class="destination-subtitle">Edmonton Local Exploration → Toronto | October 15, 2025</p>
+        </div>
+        <div class="destination-content">
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #EF4444;">
+                  <i class="fas fa-plane-departure"></i>
+                </div>
+                <h3 class="info-card-title">Flight Information</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Departure Time</span>
+                <span class="info-value">6:45 PM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Airport</span>
+                <span class="info-value">Edmonton (YEG)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Destination</span>
+                <span class="info-value">Toronto (YYZ)</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #EF4444;">
+                  <i class="fas fa-car"></i>
+                </div>
+                <h3 class="info-card-title">Car Rental Drop-off</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">Edmonton Airport</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Return By</span>
+                <span class="info-value">~4:45 PM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Check</span>
+                <span class="info-value">Fuel tank, damage</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #EF4444;">
+                  <i class="fas fa-city"></i>
+                </div>
+                <h3 class="info-card-title">Edmonton Highlights</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">West Edmonton Mall</span>
+                <span class="info-value">Largest in North America</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">River Valley Parks</span>
+                <span class="info-value">Beautiful city views</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Old Strathcona</span>
+                <span class="info-value">Historic district</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="info-card-icon" style="background: #EF4444;">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="info-card-title">Timing Reminders</h3>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Check-out</span>
+                <span class="info-value">11:00 AM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Arrive at Airport</span>
+                <span class="info-value">By 4:45 PM</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Exploration Time</span>
+                <span class="info-value">~5 hours available</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">08:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Morning & Hotel Check-out</div>
+                <div class="timeline-description">Pack up, grab breakfast, check out by 11 AM</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">11:30</div>
+              <div class="timeline-content">
+                <div class="timeline-title">West Edmonton Mall</div>
+                <div class="timeline-description">World's largest mall - shopping, attractions, lunch options</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">14:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">River Valley Viewpoint</div>
+                <div class="timeline-description">Quick stop at scenic overlook or Legislature grounds</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">15:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Old Strathcona District</div>
+                <div class="timeline-description">Historic Whyte Avenue - cafes, boutiques, local vibe</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Head to Airport</div>
+                <div class="timeline-description">Return rental car, check in for flight</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">16:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Drop Off Rental Car</div>
+                <div class="timeline-description">Return vehicle, complete final inspection</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">17:00</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Airport Check-in & Security</div>
+                <div class="timeline-description">Check bags, clear security - allow extra time!</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">18:45</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Flight YEG → YYZ</div>
+                <div class="timeline-description">Safe travels home! What an amazing adventure! 🎉</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; padding: 20px; background: #DBEAFE; border-left: 4px solid #3B82F6; border-radius: 8px;">
+            <h4 style="color: #1E40AF; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-map-marked-alt"></i> Quick Edmonton Highlights
+            </h4>
+            <ul style="color: #1E40AF; margin-left: 20px; line-height: 1.8;">
+              <li><strong>West Edmonton Mall:</strong> Indoor theme park, waterpark, ice rink, 800+ stores</li>
+              <li><strong>River Valley:</strong> Largest urban parkland in North America - scenic views</li>
+              <li><strong>Alberta Legislature:</strong> Beautiful grounds perfect for photos</li>
+              <li><strong>Whyte Avenue:</strong> Trendy area with local shops, cafes, street art</li>
+              <li><strong>Souvenir Ideas:</strong> Alberta beef jerky, maple syrup, indigenous crafts</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 20px; padding: 20px; background: #FEE2E2; border-left: 4px solid #EF4444; border-radius: 8px;">
+            <h4 style="color: #991B1B; margin-bottom: 10px; font-weight: 600;">
+              <i class="fas fa-exclamation-triangle"></i> Departure Day Checklist
+            </h4>
+            <ul style="color: #991B1B; margin-left: 20px; line-height: 1.8;">
+              <li>✓ Check hotel room for forgotten items</li>
+              <li>✓ Fill rental car with gas before returning</li>
+              <li>✓ Take photos of car condition before drop-off</li>
+              <li>✓ Have all rental documents ready</li>
+              <li>✓ Check flight status before leaving</li>
+              <li>✓ Keep 2 hours buffer before flight time</li>
+              <li>✓ Save room in luggage for souvenirs!</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="costs">
+      <!-- Cost Calculator -->
+      <div class="sidebar-card cost-calculator">
+        <h3 class="sidebar-title">Group Trip Costs</h3>
+        <div class="cost-total">$527 CAD</div>
+        <ul class="cost-breakdown">
+          <li><span>Fuel (5 days)</span> <span>$230</span></li>
+          <li><span>Park Passes (4 people)</span> <span>$42</span></li>
+          <li><span>Meals & Snacks</span> <span>$200</span></li>
+          <li><span>Parking Fees</span> <span>$20</span></li>
+          <li><span>Friend's Gift/Groceries</span> <span>$35</span></li>
+        </ul>
+      </div>
+
+      <!-- Personal Cost Calculator -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">Cost Per Person</h3>
+        <div style="font-size: 2rem; font-weight: 700; text-align: center; margin: 20px 0; color: var(--primary-blue);">$132 CAD</div>
+        <ul class="cost-breakdown" style="list-style: none;">
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);"><span>Fuel Share</span> <span>$57.50</span></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);"><span>Park Pass</span> <span>$10.50</span></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);"><span>Food Share</span> <span>$50</span></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);"><span>Parking Share</span> <span>$5</span></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1);"><span>Gift/Groceries</span> <span>$8.75</span></li>
+          <li style="display: flex; justify-content: space-between; padding: 8px 0; font-weight: 600; font-size: 1.1rem;"><span>Your Total</span> <span>$131.75</span></li>
+        </ul>
+        <div style="margin-top: 15px; padding: 10px; background: var(--light-blue); border-radius: 8px; font-size: 0.9rem; color: var(--medium-gray);">
+          <strong>Note:</strong> Staying at friend's house & flights already booked! 🏠✈️✅
+        </div>
+      </div>
+
+      <!-- Weather Widget -->
+      <div class="sidebar-card weather-widget">
+        <h3 class="sidebar-title">Weather for Our Trip</h3>
+        <div class="weather-forecast" style="grid-template-columns: repeat(5, 1fr); gap: 10px;">
+          <div class="forecast-day">
+            <div style="font-weight: 600; font-size: 0.85rem;">Oct 11</div>
+            <div class="weather-icon" style="font-size: 1.5rem;">🌙</div>
+            <div style="font-size: 0.85rem;">10°C</div>
+          </div>
+          <div class="forecast-day">
+            <div style="font-weight: 600; font-size: 0.85rem;">Oct 12</div>
+            <div class="weather-icon" style="font-size: 1.5rem;">☀️</div>
+            <div style="font-size: 0.85rem;">15°C / 8°C</div>
+          </div>
+          <div class="forecast-day">
+            <div style="font-weight: 600; font-size: 0.85rem;">Oct 13</div>
+            <div class="weather-icon" style="font-size: 1.5rem;">⛅</div>
+            <div style="font-size: 0.85rem;">12°C / 5°C</div>
+          </div>
+          <div class="forecast-day">
+            <div style="font-weight: 600; font-size: 0.85rem;">Oct 14</div>
+            <div class="weather-icon" style="font-size: 1.5rem;">❄️</div>
+            <div style="font-size: 0.85rem;">8°C / -2°C</div>
+          </div>
+          <div class="forecast-day">
+            <div style="font-weight: 600; font-size: 0.85rem;">Oct 15</div>
+            <div class="weather-icon" style="font-size: 1.5rem;">🌤️</div>
+            <div style="font-size: 0.85rem;">11°C / 3°C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Facts -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">Trip Essentials</h3>
+        <ul class="quick-facts">
+          <li>
+            <i class="fas fa-clock"></i>
+            <span>Perfect timing: Mid-October for fall colors</span>
+          </li>
+          <li>
+            <i class="fas fa-camera"></i>
+            <span>Bring: Camera, warm clothes, comfy shoes</span>
+          </li>
+          <li>
+            <i class="fas fa-gas-pump"></i>
+            <span>Fuel Up: Calgary, Canmore, Saskatchewan Crossing</span>
+          </li>
+          <li>
+            <i class="fas fa-phone"></i>
+            <span>Emergency: 911 | Road Conditions: 511</span>
+          </li>
+          <li>
+            <i class="fas fa-wifi"></i>
+            <span>Cell Service: Limited - perfect for digital detox!</span>
+          </li>
+          <li>
+            <i class="fas fa-snowflake"></i>
+            <span>Pack warm: October in the Rockies gets chilly!</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Accessibility -->
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">Accessibility Features</h3>
+        <ul class="quick-facts">
+          <li>
+            <i class="fas fa-wheelchair"></i>
+            <span>Wheelchair accessible viewing areas</span>
+          </li>
+          <li>
+            <i class="fas fa-parking"></i>
+            <span>Designated accessible parking spaces</span>
+          </li>
+          <li>
+            <i class="fas fa-restroom"></i>
+            <span>Accessible washroom facilities</span>
+          </li>
+          <li>
+            <i class="fas fa-eye"></i>
+            <span>Friendly staff at all visitor centers</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Map Section -->
+    <section class="map-section" id="map">
+      <div class="map-container">
+        <div id="interactive-map"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize map
+    const map = L.map('interactive-map').setView([52.4, -116.8], 7);
+    
+    // Add tile layer
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data © OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Define route points with enhanced information
+    const routePoints = [
+      // DAY 0 - Arrival
+      {
+        coords: [53.3098, -113.5799],
+        title: "Day 0: Edmonton Airport Arrival",
+        category: "departure",
+        description: "Arrive from Toronto at 9:30 PM. Pick up rental car, drive to friend's house for the night.",
+        info: {
+          time: "Oct 11 - 21:30",
+          duration: "Evening arrival",
+          cost: "Free (staying at friend's)",
+          walking: "None",
+          accessibility: "Full airport facilities",
+          tips: "Have rental documents ready, download offline maps before leaving Toronto"
+        }
+      },
+
+      // DAY 1 - Badlands & Calgary
+      {
+        coords: [51.3947, -112.8855],
+        title: "Day 1: Horseshoe Canyon",
+        category: "photo",
+        description: "Dramatic badlands canyon with accessible viewing deck. Layered rock formations tell 70 million years of geological history. Best photos late afternoon.",
+        info: {
+          time: "Oct 12 - 10:00",
+          duration: "30-45 minutes",
+          cost: "Free parking & entry",
+          walking: "Accessible deck viewing, optional 500m trail",
+          accessibility: "Wheelchair accessible viewing platform",
+          tips: "Bring wide-angle lens, watch for rattlesnakes in summer (inactive in October)"
+        }
+      },
+      {
+        coords: [51.4683, -112.7888],
+        title: "Day 1: World's Largest Dinosaur 🦕",
+        category: "photo",
+        description: "86-foot (25m) tall T-Rex statue in downtown Drumheller. Climb 106 stairs inside for panoramic badlands view, or just enjoy from ground level for photos.",
+        info: {
+          time: "Oct 12 - 10:45",
+          duration: "15-20 minutes",
+          cost: "$5 to climb inside (optional)",
+          walking: "None to view, 106 stairs to climb inside",
+          accessibility: "Ground-level viewing wheelchair accessible, stairs not accessible",
+          tips: "Hilarious photo opportunity! Skip the climb to save legs - view from outside is still great"
+        }
+      },
+      {
+        coords: [51.4788, -112.7911],
+        title: "Day 1: Royal Tyrrell Museum",
+        category: "attraction",
+        description: "WORLD-CLASS paleontology museum with 160,000+ fossils. One of the best dinosaur museums globally. Interactive exhibits, full skeletons, hands-on fossil lab. Budget minimum 1.5-2 hours.",
+        info: {
+          time: "Oct 12 - 11:15-13:15",
+          duration: "1.5-2 hours minimum",
+          cost: "$21/adult",
+          walking: "Indoor museum walking",
+          accessibility: "Fully wheelchair accessible, wheelchairs available",
+          tips: "MUST-SEE attraction! Arrive 11:15 AM before noon crowds. Could easily spend 3 hours. Book online recommended."
+        }
+      },
+      {
+        coords: [51.4673, -112.7196],
+        title: "Day 1: Drumheller Hoodoos",
+        category: "photo",
+        description: "Iconic mushroom-shaped rock formations (hoodoos) created by millions of years of erosion. Flat 500m boardwalk makes this very accessible. Photo backdrop of Red Deer River valley.",
+        info: {
+          time: "Oct 12 - 14:00",
+          duration: "30-45 minutes",
+          cost: "Free parking & entry",
+          walking: "500m flat boardwalk (10 min round trip)",
+          accessibility: "Fully paved boardwalk, wheelchair accessible",
+          tips: "Classic Drumheller photo op. Easy walking, dramatic landscape formations"
+        }
+      },
+      {
+        coords: [51.4756, -112.7695],
+        title: "Day 1: Rosedale Suspension Bridge",
+        category: "photo",
+        description: "Historic 117m footbridge from 1931 coal mining era. Spans Red Deer River with scenic valley views. Flat walking, charming piece of Drumheller history.",
+        info: {
+          time: "Oct 12 - 14:45 (Optional)",
+          duration: "15-20 minutes",
+          cost: "Free",
+          walking: "Flat bridge crossing, wheelchair accessible",
+          accessibility: "Wheelchair accessible bridge deck",
+          tips: "Optional stop between Hoodoos and Calgary drive. Great river valley views, historic landmark"
+        }
+      },
+      {
+        coords: [51.0447, -114.0629],
+        title: "Day 1: Calgary Tower",
+        category: "attraction",
+        description: "191m observation deck with 360° views of Calgary skyline and Rocky Mountains. Glass floor section! Elevator access to top. Open 9 AM-9 PM.",
+        info: {
+          time: "Oct 12 - 17:00 (Optional)",
+          duration: "30-45 minutes",
+          cost: "$18/adult",
+          walking: "None - elevator access",
+          accessibility: "Fully wheelchair accessible, elevator to top",
+          tips: "Optional stop if time/energy. Great city views. Skip if tired to save energy for Day 3 sunrise mission"
+        }
+      },
+      {
+        coords: [51.0539, -114.0724],
+        title: "Day 1: Prince's Island Park",
+        category: "photo",
+        description: "Urban park island on Bow River with walking paths and downtown skyline views. Flat riverside trails, peaceful green space in the city. Great for evening stroll.",
+        info: {
+          time: "Oct 12 - 18:00",
+          duration: "30 minutes",
+          cost: "Free",
+          walking: "Flat paved paths, easy strolling",
+          accessibility: "Wheelchair accessible paved trails",
+          tips: "Peaceful walk before dinner, nice contrast to mountain scenery, downtown skyline photos"
+        }
+      },
+      {
+        coords: [51.0284, -114.0946],
+        title: "Day 1: Scotsman's Hill Sunset",
+        category: "photo",
+        description: "Best Calgary skyline viewpoint! Drive-up access to hilltop with panoramic city views. Golden hour sunset magic over downtown and mountains. Must-do photo stop.",
+        info: {
+          time: "Oct 12 - 19:00",
+          duration: "20-30 minutes",
+          cost: "Free",
+          walking: "None - drive-up viewpoint",
+          accessibility: "Drive-up access, wheelchair accessible viewing",
+          tips: "BEST Calgary photo spot! Time for sunset (~7:15 PM October). Bring camera. Popular spot but not too crowded"
+        }
+      },
+      {
+        coords: [51.0437, -114.0719],
+        title: "Day 1: Calgary Overnight",
+        category: "accommodation",
+        description: "Stay overnight in Calgary. Downtown has many restaurant options for dinner. Check in, rest up for tomorrow's early Banff adventure.",
+        info: {
+          time: "Oct 12 - 19:45-22:00",
+          duration: "Overnight stay",
+          cost: "Hotel accommodation",
+          walking: "Minimal",
+          accessibility: "Full city amenities",
+          tips: "Book accommodation near downtown, early bedtime recommended, prepare for Day 3's 4 AM wake-up!"
+        }
+      },
+
+      // DAY 2 - Banff Town
+      {
+        coords: [51.2069, -115.5471],
+        title: "Day 2: Cascade Ponds",
+        category: "photo",
+        description: "Small peaceful ponds reflecting Mt. Rundle and surrounding peaks. Morning mist common. Short 5-minute walk from parking to water's edge.",
+        info: {
+          time: "Oct 13 - 08:45",
+          duration: "30 minutes",
+          cost: "Included in park pass",
+          walking: "5 min walk from parking",
+          accessibility: "Gravel path, relatively flat",
+          tips: "First stop after entering Banff - buy park pass here at gate station"
+        }
+      },
+      {
+        coords: [51.2460, -115.4930],
+        title: "Day 2: Lake Minnewanka",
+        category: "photo",
+        description: "Banff's largest lake at 21km long. Multiple pullouts along scenic drive with mountain and lake views. Watch for bighorn sheep on rocks!",
+        info: {
+          time: "Oct 13 - 09:30",
+          duration: "1 hour scenic drive",
+          cost: "Included in park pass",
+          walking: "Optional short walks at pullouts (2-5 min)",
+          accessibility: "Many viewpoints accessible from car",
+          tips: "Drive the full loop, stop at multiple viewpoints, binoculars useful for wildlife"
+        }
+      },
+      {
+        coords: [51.2328, -115.5050],
+        title: "Day 2: Two Jack Lake",
+        category: "photo",
+        description: "Smaller, quieter alternative to nearby Lake Minnewanka. Crystal clear water, stunning mountain backdrop. Often less crowded. 2-minute walk to lakeshore.",
+        info: {
+          time: "Oct 13 - 11:00",
+          duration: "20-30 minutes",
+          cost: "Included in park pass",
+          walking: "2 min walk to shore",
+          accessibility: "Short flat path",
+          tips: "Great spot for a peaceful break, less touristy than main attractions"
+        }
+      },
+      {
+        coords: [51.1784, -115.5708],
+        title: "Day 2: Banff Town - Lunch & Shopping",
+        category: "town",
+        description: "Charming mountain town on Banff Avenue. Browse local shops, grab lunch at cafes, visit Cascade Gardens. 1.5 hours to explore the main street comfortably.",
+        info: {
+          time: "Oct 13 - 12:00-13:30",
+          duration: "1.5 hours",
+          cost: "Lunch ~$15-25, street parking $3/hr",
+          walking: "Flat sidewalks, easy strolling",
+          accessibility: "Fully accessible downtown",
+          tips: "Lunch gets busy 12-2PM, side streets have free parking, lots of photo ops!"
+        }
+      },
+      {
+        coords: [51.1630, -115.5730],
+        title: "Day 2: Vermilion Lakes",
+        category: "photo",
+        description: "Three connected lakes with Mt. Rundle reflection - THE classic Banff postcard view. Drive between 3 viewpoints along 4km road. Sunset golden hour is magical.",
+        info: {
+          time: "Oct 13 - 15:00",
+          duration: "45 minutes",
+          cost: "Included in park pass",
+          walking: "Drive between viewpoints (minimal walking)",
+          accessibility: "Drive-up viewpoints",
+          tips: "Watch for elk! Common here especially evening. Stay 30m away, don't approach"
+        }
+      },
+      {
+        coords: [51.1750, -115.5450],
+        title: "Day 2: Tunnel Mountain Drive Viewpoint",
+        category: "photo",
+        description: "Panoramic viewpoint overlooking Banff townsite and Bow Valley. Drive right up to parking area. 360-degree mountain views including Mt. Rundle.",
+        info: {
+          time: "Oct 13 - 16:00",
+          duration: "15-20 minutes",
+          cost: "Included in park pass",
+          walking: "None - view from parking area",
+          accessibility: "Fully accessible drive-up",
+          tips: "Quick stop for aerial perspective of town, great for orientation"
+        }
+      },
+      {
+        coords: [51.1642, -115.5595],
+        title: "Day 2: Surprise Corner Viewpoint",
+        category: "photo",
+        description: "Classic viewpoint of the iconic Fairmont Banff Springs Hotel (the 'Castle in the Rockies'). Quick parking lot stop with interpretive signs.",
+        info: {
+          time: "Oct 13 - 16:45",
+          duration: "10-15 minutes",
+          cost: "Included in park pass",
+          walking: "None - parking lot viewpoint",
+          accessibility: "Fully accessible",
+          tips: "Historic hotel visible in valley, built 1888, great for postcard photos"
+        }
+      },
+      {
+        coords: [51.1656, -115.5636],
+        title: "Day 2: Bow Falls",
+        category: "photo",
+        description: "Waterfall on the Bow River below Banff Springs Hotel. Short 50m flat paved walk to viewing platforms. Multiple angles available.",
+        info: {
+          time: "Oct 13 - 17:30",
+          duration: "20 minutes",
+          cost: "Included in park pass",
+          walking: "50m flat paved path",
+          accessibility: "Paved wheelchair-accessible platforms",
+          tips: "Last stop before returning to Calgary, NOT as dramatic as Day 3 waterfalls but still nice"
+        }
+      },
+
+      // DAY 3 - Icefields Parkway (SUNRISE MISSION!)
+      {
+        coords: [51.4254, -116.1773],
+        title: "Day 3: Lake Louise SUNRISE 🌅",
+        category: "sunrise",
+        description: "THE MAIN EVENT! World-famous turquoise glacial lake at sunrise. Golden light hits Victoria Glacier creating magical reflections. Arrive 75 min before sunrise to set up.",
+        info: {
+          time: "Oct 14 - 06:30 (arrive) / 07:45 (sunrise)",
+          duration: "2 hours (stay until 08:30)",
+          cost: "$15 parking",
+          walking: "5 min walk from lot to lakeshore",
+          accessibility: "Paved lakefront path",
+          tips: "LEAVE CALGARY BY 4 AM! Dress WARM (-2°C at dawn). Tripod recommended. Coffee/breakfast before you leave!"
+        }
+      },
+      {
+        coords: [51.4550, -116.2850],
+        title: "Day 3: Herbert Lake",
+        category: "photo",
+        description: "Small peaceful lake often empty of tourists. Perfect mirror reflections of surrounding peaks. 2-minute walk from Icefields Parkway roadside parking.",
+        info: {
+          time: "Oct 14 - 09:00",
+          duration: "15-20 minutes",
+          cost: "Free roadside pullout",
+          walking: "2 min walk",
+          accessibility: "Easy flat trail",
+          tips: "Often overlooked - you might have it to yourself! Great for peaceful photos post-sunrise rush"
+        }
+      },
+      {
+        coords: [51.6752, -116.4708],
+        title: "Day 3: Bow Lake & Crowfoot Glacier",
+        category: "photo",
+        description: "Glacier-fed turquoise lake with Crowfoot Glacier visible in background. Drive-up viewpoint - glacier visible from your car! Historic Num-Ti-Jah Lodge on lakeshore.",
+        info: {
+          time: "Oct 14 - 09:45",
+          duration: "20 minutes",
+          cost: "Free roadside pullout",
+          walking: "Optional - view from car or short walk",
+          accessibility: "Fully accessible from parking",
+          tips: "Crowfoot Glacier used to have 3 'toes' - climate change melted one in 1940s"
+        }
+      },
+      {
+        coords: [51.7256, -116.5244],
+        title: "Day 3: Peyto Lake Viewpoint",
+        category: "photo",
+        description: "Famous wolf-head shaped lake with vibrant turquoise color. LOWER viewpoint is accessible (5 min walk, wheelchair friendly). Upper viewpoint requires steeper climb.",
+        info: {
+          time: "Oct 14 - 10:30",
+          duration: "30-40 minutes",
+          cost: "Free parking lot",
+          walking: "Lower viewpoint: 5 min, Upper: 15 min uphill",
+          accessibility: "Lower viewpoint wheelchair accessible",
+          tips: "STAY AT LOWER VIEWPOINT to save your legs! Color most vibrant mid-morning with sun"
+        }
+      },
+      {
+        coords: [51.7183, -116.5697],
+        title: "Day 3: Mistaya Canyon",
+        category: "photo",
+        description: "Narrow limestone canyon carved by Mistaya River. Powerful water rushing through tight gorge. 10-minute walk on flat forest trail to viewing bridge.",
+        info: {
+          time: "Oct 14 - 11:30",
+          duration: "30 minutes",
+          cost: "Free parking lot",
+          walking: "10 min flat forest trail each way",
+          accessibility: "Gravel trail, relatively flat",
+          tips: "Longest walk of the day (20 min round trip) - worth it for dramatic canyon views!"
+        }
+      },
+      {
+        coords: [51.9836, -116.7847],
+        title: "Day 3: Saskatchewan River Crossing",
+        category: "services",
+        description: "Gas station, small diner, and convenience store. LAST services for 130km! Fill up tank, use restrooms, grab lunch. Only food option until Jasper.",
+        info: {
+          time: "Oct 14 - 12:15",
+          duration: "45 min lunch break",
+          cost: "Lunch ~$15, gas prices high (remote location)",
+          walking: "None",
+          accessibility: "Full facilities",
+          tips: "MANDATORY GAS STOP! Next station is 130km north. Use restrooms here!"
+        }
+      },
+      {
+        coords: [52.1419, -117.0342],
+        title: "Day 3: Weeping Wall",
+        category: "photo",
+        description: "Massive cliff face with waterfalls. In October often frozen creating huge ice curtains popular with ice climbers. Roadside pullout - view from car!",
+        info: {
+          time: "Oct 14 - 13:30",
+          duration: "10 minutes",
+          cost: "Free roadside pullout",
+          walking: "None - view from parking",
+          accessibility: "Fully accessible",
+          tips: "Quick photo stop, dramatic cliff face, watch for ice climbers if frozen"
+        }
+      },
+      {
+        coords: [52.2206, -117.2244],
+        title: "Day 3: Columbia Icefield Discovery Centre",
+        category: "services",
+        description: "Visitor center with glacier views, exhibits, gift shop, restrooms. View Athabasca Glacier from building. Base for Ice Explorer tours (optional, expensive).",
+        info: {
+          time: "Oct 14 - 14:45",
+          duration: "30 minutes (or 90 min with Ice Explorer)",
+          cost: "Free visitor center | Ice Explorer $115/person optional",
+          walking: "Minimal - building exploration",
+          accessibility: "Fully accessible modern facility",
+          tips: "Restroom stop! Ice Explorer tour is amazing but takes 90 min + $115/person - skip to stay on schedule"
+        }
+      },
+      {
+        coords: [52.2156, -117.2419],
+        title: "Day 3: Glacier Skywalk 🌉",
+        category: "attraction",
+        description: "Glass-floor walkway extending 35m over Sunwapta Valley, suspended 280m above canyon floor. Incredible views. 5-min walk from parking, experience takes 30 min total.",
+        info: {
+          time: "Oct 14 - 15:15",
+          duration: "30-40 minutes",
+          cost: "$35/person (BOOK AHEAD!)",
+          walking: "5 min walk to skywalk",
+          accessibility: "Wheelchair accessible walkway",
+          tips: "MUST book 2-3 days in advance online! Worth it for the experience and views. Not scary if afraid of heights - very sturdy."
+        }
+      },
+      {
+        coords: [52.5217, -117.6331],
+        title: "Day 3: Sunwapta Falls",
+        category: "photo",
+        description: "Two-tiered waterfall on Sunwapta River. Upper viewpoint is 1-min walk, lower viewpoint is 3-min walk. Both flat and accessible.",
+        info: {
+          time: "Oct 14 - 16:15",
+          duration: "20-25 minutes",
+          cost: "Free parking",
+          walking: "Upper: 1 min, Lower: 3 min (both flat)",
+          accessibility: "Paved paths to both viewpoints",
+          tips: "Quick stop, both viewpoints recommended, less crowded than Athabasca Falls"
+        }
+      },
+      {
+        coords: [52.6648, -117.8813],
+        title: "Day 3: Athabasca Falls",
+        category: "photo",
+        description: "Most powerful waterfall in the Rockies! Multiple viewing platforms showing different angles. 5-min flat walk with paved paths. Dramatic carved limestone canyon.",
+        info: {
+          time: "Oct 14 - 16:45",
+          duration: "30 minutes",
+          cost: "Free parking",
+          walking: "5 min to main viewpoint, paved paths throughout",
+          accessibility: "Multiple wheelchair-accessible platforms",
+          tips: "MUST-SEE waterfall! Multiple viewpoints, very photogenic, feels the power of water"
+        }
+      },
+      {
+        coords: [53.5444, -113.4909],
+        title: "Day 3: Return to Edmonton",
+        category: "arrival",
+        description: "Drive back to Edmonton via Jasper. Long 3.5 hour drive. Arrive friend's house ~9 PM after epic 17-hour day. REST!",
+        info: {
+          time: "Oct 14 - 21:00 arrival",
+          duration: "3.5 hour drive from Athabasca Falls",
+          cost: "Gas ~$50",
+          walking: "None",
+          accessibility: "Highway driving",
+          tips: "Long drive through Jasper, mostly straight highway. You EARNED this rest after 4 AM start!"
+        }
+      },
+
+      // DAY 4 - Edmonton & Departure
+      {
+        coords: [53.5228, -113.6247],
+        title: "Day 4: West Edmonton Mall",
+        category: "town",
+        description: "Largest mall in North America! Indoor theme park, waterpark, ice rink, 800+ stores. Spend 2-3 hours exploring and souvenir shopping.",
+        info: {
+          time: "Oct 15 - 11:30-14:00",
+          duration: "2-3 hours",
+          cost: "Free entry, shopping varies",
+          walking: "Indoor mall walking",
+          accessibility: "Fully accessible",
+          tips: "Grab lunch here, Alberta beef jerky and maple syrup make great souvenirs"
+        }
+      },
+      {
+        coords: [53.5344, -113.5065],
+        title: "Day 4: River Valley Viewpoint",
+        category: "photo",
+        description: "Quick stop at Edmonton's river valley parks - largest urban parkland in North America. Scenic overlook of North Saskatchewan River.",
+        info: {
+          time: "Oct 15 - 14:00",
+          duration: "15-20 minutes",
+          cost: "Free",
+          walking: "Minimal",
+          accessibility: "Accessible viewpoints available",
+          tips: "Quick photo op, beautiful river valley system"
+        }
+      },
+      {
+        coords: [53.5191, -113.5153],
+        title: "Day 4: Old Strathcona - Whyte Avenue",
+        category: "town",
+        description: "Historic district with trendy shops, cafes, street art, local boutiques. Grab final coffee before airport. Charming neighborhood atmosphere.",
+        info: {
+          time: "Oct 15 - 15:00-16:00",
+          duration: "1 hour",
+          cost: "Coffee/snacks ~$10-15",
+          walking: "Street strolling",
+          accessibility: "Sidewalk accessible",
+          tips: "Last chance for souvenirs, final coffee before flight, vibrant local area"
+        }
+      },
+      {
+        coords: [53.3098, -113.5799],
+        title: "Day 4: Edmonton Airport Departure",
+        category: "departure",
+        description: "Return rental car by 4:45 PM. Flight to Toronto at 6:45 PM. End of epic Alberta adventure!",
+        info: {
+          time: "Oct 15 - 16:45-18:45",
+          duration: "Check-in and departure",
+          cost: "None (flight pre-booked)",
+          walking: "Airport walking",
+          accessibility: "Full airport facilities",
+          tips: "Allow 2 hours at airport, return car with full tank, take final photos, download pics from cameras!"
+        }
+      }
+    ];
+
+    // Create custom icons for different categories
+    const icons = {
+      departure: L.divIcon({
+        className: 'custom-icon departure',
+        html: '<div style="background: linear-gradient(135deg, #10B981, #059669); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); border: 3px solid white;"><i class="fas fa-plane-departure" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      photo: L.divIcon({
+        className: 'custom-icon photo',
+        html: '<div style="background: linear-gradient(135deg, #3B82F6, #1E40AF); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); border: 3px solid white;"><i class="fas fa-camera" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      accommodation: L.divIcon({
+        className: 'custom-icon accommodation',
+        html: '<div style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); border: 3px solid white;"><i class="fas fa-bed" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      arrival: L.divIcon({
+        className: 'custom-icon arrival',
+        html: '<div style="background: linear-gradient(135deg, #EF4444, #DC2626); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); border: 3px solid white;"><i class="fas fa-flag-checkered" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      sunrise: L.divIcon({
+        className: 'custom-icon sunrise',
+        html: '<div style="background: linear-gradient(135deg, #F59E0B, #D97706); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); border: 3px solid white;"><i class="fas fa-sun" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      attraction: L.divIcon({
+        className: 'custom-icon attraction',
+        html: '<div style="background: linear-gradient(135deg, #EC4899, #DB2777); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4); border: 3px solid white;"><i class="fas fa-star" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      services: L.divIcon({
+        className: 'custom-icon services',
+        html: '<div style="background: linear-gradient(135deg, #6366F1, #4F46E5); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); border: 3px solid white;"><i class="fas fa-gas-pump" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      }),
+      town: L.divIcon({
+        className: 'custom-icon town',
+        html: '<div style="background: linear-gradient(135deg, #14B8A6, #0D9488); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4); border: 3px solid white;"><i class="fas fa-city" style="color: white; font-size: 16px;"></i></div>',
+        iconSize: [35, 35],
+        iconAnchor: [17, 17]
+      })
+    };
+
+    // Add markers to map
+    routePoints.forEach(point => {
+      const marker = L.marker(point.coords, { 
+        icon: icons[point.category] 
+      }).addTo(map);
+
+      // Get image path for location
+      const getLocationImage = (title) => {
+        const imageMap = {
+          "Edmonton - Starting Point": "./images/hero-background.jpg",
+          "Horseshoe Canyon": "./images/horseshoe-canyon.png", 
+          "Drumheller Hoodoos": "./images/drumheller-hoodoos.png",
+          "Calgary - Overnight": "./images/calgary-skyline.png",
+          "Cascade Ponds": "./images/vermilion-lakes.png",
+          "Lake Minnewanka": "./images/lake-minnewanka.png", 
+          "Lake Louise": "./images/lake-louise.png",
+          "Bow Lake": "./images/bow-lake.png",
+          "Peyto Lake": "./images/bow-lake.png",
+          "Columbia Icefield Centre": "./images/columbia-icefield.png",
+          "Athabasca Falls": "./images/athabasca-falls.png",
+          "Return to Edmonton": "./images/hero-background.jpg"
+        };
+        return imageMap[title] || "./images/hero-background.jpg";
+      };
+
+      // Create detailed popup with description
+      const popupContent = `
+        <div style="min-width: 300px; max-width: 350px; font-family: 'Inter', sans-serif;">
+          <h3 style="color: #1E40AF; margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 600;">${point.title}</h3>
+          <p style="color: #475569; font-size: 0.9rem; line-height: 1.5; margin: 0 0 12px 0;">${point.description || ''}</p>
+          <div style="display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 0.85rem; background: #F8FAFC; padding: 12px; border-radius: 8px;">
+            <div style="color: #64748B;">⏰</div>
+            <div style="font-weight: 500; color: #334155;">${point.info.time}</div>
+
+            <div style="color: #64748B;">⏱️</div>
+            <div style="font-weight: 500; color: #334155;">${point.info.duration}</div>
+
+            <div style="color: #64748B;">💰</div>
+            <div style="font-weight: 500; color: #334155;">${point.info.cost}</div>
+
+            <div style="color: #64748B;">🚶</div>
+            <div style="font-weight: 500; color: #334155;">${point.info.walking}</div>
+
+            <div style="color: #64748B;">♿</div>
+            <div style="font-weight: 500; color: #334155;">${point.info.accessibility}</div>
+          </div>
+          ${point.info.tips ? `<div style="margin-top: 10px; padding: 10px; background: #FEF3C7; border-left: 3px solid #F59E0B; border-radius: 4px; font-size: 0.85rem; color: #78350F; line-height: 1.4;"><strong>💡 Tip:</strong> ${point.info.tips}</div>` : ''}
+        </div>
+      `;
+
+      marker.bindPopup(popupContent, { maxWidth: 350 });
+    });
+
+    // Add route line
+    const routeCoords = routePoints.map(point => point.coords);
+    L.polyline(routeCoords, {
+      color: '#3B82F6',
+      weight: 5,
+      opacity: 0.9,
+      dashArray: '10, 5'
+    }).addTo(map);
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Dropdown toggle (desktop and mobile)
+    document.querySelector('.nav-link-main').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('.nav-dropdown').classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.querySelector('.nav-dropdown');
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    // Carousel functionality
+    const carouselWrapper = document.getElementById('carouselWrapper');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicatorsContainer = document.getElementById('carouselIndicators');
+    const slides = document.querySelectorAll('.carousel-slide');
+    let currentIndex = 0;
+    let autoPlayInterval;
+
+    // Create indicators
+    slides.forEach((_, index) => {
+      const indicator = document.createElement('button');
+      indicator.classList.add('carousel-indicator');
+      if (index === 0) indicator.classList.add('active');
+      indicator.addEventListener('click', () => goToSlide(index));
+      indicatorsContainer.appendChild(indicator);
+    });
+
+    const indicators = document.querySelectorAll('.carousel-indicator');
+
+    function updateCarousel() {
+      carouselWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+      indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    function goToSlide(index) {
+      currentIndex = index;
+      updateCarousel();
+      resetAutoPlay();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateCarousel();
+      resetAutoPlay();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateCarousel();
+      resetAutoPlay();
+    }
+
+    function startAutoPlay() {
+      autoPlayInterval = setInterval(nextSlide, 5000);
+    }
+
+    function resetAutoPlay() {
+      clearInterval(autoPlayInterval);
+      startAutoPlay();
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselWrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    carouselWrapper.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) nextSlide();
+      if (touchEndX - touchStartX > 50) prevSlide();
+    });
+
+    // Start autoplay
+    startAutoPlay();
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          // Close mobile menu after clicking
+          navLinks.classList.remove('active');
+        }
+      });
+    });
+
+    // Add scroll effect to navigation
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.nav');
+      if (window.scrollY > 100) {
+        nav.style.background = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        nav.style.background = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+
+    // Photo modal functionality
+    document.querySelectorAll('.photo-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0,0,0,0.95);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+          cursor: pointer;
+        `;
+        
+        const modalImg = document.createElement('img');
+        modalImg.src = img.src;
+        modalImg.style.cssText = `
+          max-width: 90vw;
+          max-height: 90vh;
+          border-radius: 15px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        `;
+        
+        overlay.appendChild(modalImg);
+        overlay.onclick = () => document.body.removeChild(overlay);
+        document.body.appendChild(overlay);
+      });
+    });
+  </script>
+</body>
+</html>

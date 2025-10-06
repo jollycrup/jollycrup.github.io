@@ -1,0 +1,169 @@
+<!-- Compact Gallery with Multiple Photos Per Slide -->
+<!-- Replace the gallery section in main.html (lines 855-972) with this -->
+
+<section id="gallery" style="background: linear-gradient(135deg, #ffffff 0%, #EFF6FF 100%); padding: 40px 20px;">
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-blue); text-align: center; margin-bottom: 10px;">Trip Gallery</h2>
+    <p style="text-align: center; color: var(--medium-gray); margin-bottom: 25px; font-size: 0.95rem;">Highlights from our Alberta adventure</p>
+
+    <div class="carousel-container">
+      <div class="carousel-wrapper" id="carouselWrapper">
+        <!-- Slide 1: Day 1 Badlands -->
+        <div class="carousel-slide">
+          <div class="photo-grid">
+            <div class="photo-grid-item">
+              <img src="./images/horseshoe-canyon.png" alt="Horseshoe Canyon">
+              <span class="photo-label">Horseshoe Canyon</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/drumheller-hoodoos.png" alt="Drumheller Hoodoos">
+              <span class="photo-label">Drumheller Hoodoos</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/calgary-skyline.png" alt="Calgary Skyline">
+              <span class="photo-label">Calgary Sunset</span>
+            </div>
+          </div>
+          <div class="carousel-caption">
+            <h3>Day 1: Badlands & Calgary</h3>
+          </div>
+        </div>
+
+        <!-- Slide 2: Day 2 Banff -->
+        <div class="carousel-slide">
+          <div class="photo-grid">
+            <div class="photo-grid-item">
+              <img src="./images/lake-minnewanka.png" alt="Lake Minnewanka">
+              <span class="photo-label">Lake Minnewanka</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/vermilion-lakes.png" alt="Vermilion Lakes">
+              <span class="photo-label">Vermilion Lakes</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/lake-louise.png" alt="Banff Mountains">
+              <span class="photo-label">Banff Area</span>
+            </div>
+          </div>
+          <div class="carousel-caption">
+            <h3>Day 2: Banff National Park</h3>
+          </div>
+        </div>
+
+        <!-- Slide 3: Day 3 Icefields Parkway -->
+        <div class="carousel-slide">
+          <div class="photo-grid">
+            <div class="photo-grid-item">
+              <img src="./images/lake-louise.png" alt="Lake Louise">
+              <span class="photo-label">Lake Louise Sunrise</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/bow-lake.png" alt="Bow Lake">
+              <span class="photo-label">Bow Lake</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/columbia-icefield.png" alt="Columbia Icefield">
+              <span class="photo-label">Columbia Icefield</span>
+            </div>
+          </div>
+          <div class="carousel-caption">
+            <h3>Day 3: Icefields Parkway</h3>
+          </div>
+        </div>
+
+        <!-- Slide 4: Natural Wonders -->
+        <div class="carousel-slide">
+          <div class="photo-grid">
+            <div class="photo-grid-item">
+              <img src="./images/athabasca-falls.png" alt="Athabasca Falls">
+              <span class="photo-label">Athabasca Falls</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/morants-curve.png" alt="Mountain Vista">
+              <span class="photo-label">Mountain Vista</span>
+            </div>
+            <div class="photo-grid-item">
+              <img src="./images/hero-background.jpg" alt="Rocky Mountains">
+              <span class="photo-label">Canadian Rockies</span>
+            </div>
+          </div>
+          <div class="carousel-caption">
+            <h3>Natural Wonders</h3>
+          </div>
+        </div>
+      </div>
+
+      <button class="carousel-btn prev" id="prevBtn">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="carousel-btn next" id="nextBtn">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+
+      <div class="carousel-indicators" id="carouselIndicators"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Additional CSS for photo grid (add to <style> section) -->
+<style>
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.photo-grid-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  aspect-ratio: 4/3;
+}
+
+.photo-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.photo-grid-item:hover img {
+  transform: scale(1.05);
+}
+
+.photo-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.carousel-caption h3 {
+  font-size: 1.2rem;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .photo-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 10px;
+  }
+
+  .photo-label {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .carousel-caption h3 {
+    font-size: 1rem;
+  }
+}
+</style>
