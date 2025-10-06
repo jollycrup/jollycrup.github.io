@@ -791,16 +791,17 @@
         right: 0;
         background: white;
         flex-direction: column;
-        padding: 20px;
+        padding: 0 20px;
         gap: 15px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s ease, padding 0.3s ease;
       }
 
       .nav-links.active {
         max-height: 500px;
+        padding: 20px;
         overflow-y: auto;
       }
 
@@ -892,7 +893,7 @@
     <div class="hero-content">
       <h1>Our Epic Alberta Roadtrip</h1>
       <p class="hero-subtitle">A 5-day couples adventure through the Canadian Rockies</p>
-      <p class="hero-subtitle">Designed with love by Riddhi ❤✈️</p>
+      <p style="text-align: center; color: var(--medium-gray); font-size: 0.85rem; margin-top: 10px; opacity: 0.8;">✨ Designed with love by Riddhi 💖 ✨</p>
       <div class="hero-stats">
         <div class="stat-item">
           <span class="stat-number">5</span>
